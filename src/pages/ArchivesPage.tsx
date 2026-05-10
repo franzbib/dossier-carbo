@@ -21,7 +21,7 @@ function uniqueValues(rows: ArchiveRow[], field: keyof ArchiveRow): string[] {
 
 function Tags({ value }: { value?: string }) {
   const items = splitList(value);
-  if (items.length === 0) return <span className="muted">Non renseigné</span>;
+  if (items.length === 0) return <span className="muted">Pas encore indiqué</span>;
   return (
     <div className="tags">
       {items.map((item) => (
@@ -68,19 +68,24 @@ export default function ArchivesPage() {
     <section>
       <div className="section-heading">
         <div>
-          <p className="eyebrow">Consultation</p>
-          <h1>Archives</h1>
+          <p className="eyebrow">Parcourir les documents</p>
+          <h1>Les documents</h1>
+          <p className="page-intro">
+            Chaque fiche aide à se repérer dans le dossier. Les résumés et les
+            transcriptions restent des aides de lecture : l’image originale doit
+            être relue pour toute conclusion importante.
+          </p>
         </div>
         <span className="count">{filtered.length} document(s)</span>
       </div>
 
       <div className="filters">
         <label>
-          Recherche plein texte
+          Rechercher dans les transcriptions
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Nom, lieu, thème, transcription…"
+            placeholder="Nom, lieu, thème, passage du texte…"
           />
         </label>
         <label>
@@ -106,7 +111,7 @@ export default function ArchivesPage() {
           </select>
         </label>
         <label>
-          À vérifier
+          À relire avec attention
           <select value={verify} onChange={(event) => setVerify(event.target.value)}>
             <option value="">Tous</option>
             <option value="oui">Oui</option>
@@ -115,7 +120,7 @@ export default function ArchivesPage() {
         </label>
       </div>
 
-      {loading && <p className="status">Chargement des archives…</p>}
+      {loading && <p className="status">Les documents se chargent…</p>}
       {error && <p className="status error">{error}</p>}
 
       <div className="archive-list">
@@ -134,26 +139,26 @@ export default function ArchivesPage() {
               >
                 <span>
                   <strong>{row.Nom_fichier || "Document sans nom"}</strong>
-                  <small>{row.ID_archive || "ID non renseigné"}</small>
+                  <small>{row.ID_archive || "Référence non indiquée"}</small>
                 </span>
-                <span className="confidence">{row.Niveau_confiance || "non évalué"}</span>
+                <span className="confidence">{row.Niveau_confiance || "à relire"}</span>
               </button>
               <div className="card-body">
                 <dl className="meta-grid">
                   <div>
                     <dt>Date</dt>
-                    <dd>{row.Date_document || "Non précisée"}</dd>
+                    <dd>{row.Date_document || "Pas encore précisée"}</dd>
                   </div>
                   <div>
                     <dt>Type</dt>
-                    <dd>{row.Type_document || "Non renseigné"}</dd>
+                    <dd>{row.Type_document || "Pas encore indiqué"}</dd>
                   </div>
                   <div>
-                    <dt>À vérifier</dt>
+                    <dt>À relire</dt>
                     <dd>{isYes(row.A_verifier) ? "Oui" : "Non"}</dd>
                   </div>
                 </dl>
-                <p>{row.Resume || "Aucun résumé disponible."}</p>
+                <p>{row.Resume || "Aucun résumé n’est encore disponible."}</p>
                 <h3>Personnes</h3>
                 <Tags value={row.Personnes} />
                 <h3>Lieux</h3>
@@ -168,22 +173,22 @@ export default function ArchivesPage() {
               </div>
               {selected && (
                 <div className="detail">
-                  <h3>Fiche détaillée</h3>
+                  <h3>Voir la fiche du document</h3>
                   <div className="source-block">
                     <h4>Document source</h4>
-                    <p>{row.Evenement || "Événement non renseigné."}</p>
+                    <p>{row.Evenement || "Événement pas encore indiqué."}</p>
                   </div>
                   <div className="source-block">
-                    <h4>Transcription brute automatique</h4>
-                    <p>{row.Transcription_brute || "Non disponible."}</p>
+                    <h4>Première transcription automatique</h4>
+                    <p>{row.Transcription_brute || "Pas encore disponible."}</p>
                   </div>
                   <div className="source-block">
                     <h4>Transcription corrigée</h4>
-                    <p>{row.Transcription_corrigee || "Non disponible."}</p>
+                    <p>{row.Transcription_corrigee || "Pas encore disponible."}</p>
                   </div>
                   <div className="source-block">
-                    <h4>Passages incertains et commentaires</h4>
-                    <p>{row.Passages_incertains || row.Commentaires || "Aucun point signalé."}</p>
+                    <h4>Passages à relire et commentaires</h4>
+                    <p>{row.Passages_incertains || row.Commentaires || "Aucun point particulier n’est signalé."}</p>
                   </div>
                 </div>
               )}

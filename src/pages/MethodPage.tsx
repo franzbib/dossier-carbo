@@ -1,27 +1,31 @@
 const sections = [
   {
-    title: "Transcription brute",
-    body: "Texte produit automatiquement depuis l’image. Il peut contenir des erreurs de lecture, des omissions ou des confusions de noms propres.",
+    title: "Un outil de travail familial",
+    body: "Cette base aide à classer les documents, à retrouver les noms, les lieux et les dates, et à formuler des questions. Elle ne constitue pas une édition définitive des archives.",
   },
   {
-    title: "Transcription corrigée",
-    body: "Version relue ou normalisée lorsque c’est possible. Elle reste dépendante de la lisibilité de l’image et doit être comparée à la source.",
+    title: "Première transcription",
+    body: "Texte préparé automatiquement à partir de l’image. Il permet de chercher dans les documents, mais il peut contenir des erreurs de lecture, des omissions ou des confusions de noms propres.",
   },
   {
-    title: "Résumé IA",
-    body: "Synthèse courte destinée à faciliter l’orientation dans la base. Elle ne remplace pas le document et ne constitue pas une preuve autonome.",
+    title: "Transcription relue",
+    body: "Version corrigée ou normalisée lorsque c’est possible. Elle reste dépendante de la lisibilité de l’image et doit être comparée au document original.",
   },
   {
-    title: "Niveau de confiance",
-    body: "Indication qualitative sur la fiabilité probable de l’indexation. Un niveau faible ou non évalué appelle une vérification prioritaire.",
+    title: "Résumé automatique",
+    body: "Court résumé destiné à aider l’orientation dans le dossier. Il ne remplace pas le document et ne constitue pas une preuve autonome.",
+  },
+  {
+    title: "Degré de confiance",
+    body: "Indication simple sur la fiabilité probable de la lecture. Un niveau faible ou non évalué signifie qu’il faut relire l’image originale avec attention.",
   },
   {
     title: "Images originales",
-    body: "Toute conclusion importante doit revenir à l’image originale, car elle seule permet de contrôler la lecture, le contexte matériel et les signatures.",
+    body: "Pour toute conclusion importante, l’image originale reste la référence. Elle seule permet de vérifier la lecture, le contexte matériel, les signatures et les détails du document.",
   },
   {
     title: "Citation prudente",
-    body: "Citer la base en mentionnant le nom du fichier ou l’ID_archive, le type de champ utilisé et, si nécessaire, la mention “transcription automatique à vérifier sur l’image originale”.",
+    body: "Pour citer une information, mentionner le nom du fichier ou l’ID_archive, puis préciser si elle vient d’une transcription, d’un résumé ou d’une relecture. En cas de doute, ajouter que la lecture doit être vérifiée sur l’image originale.",
   },
 ];
 
@@ -29,7 +33,12 @@ export default function MethodPage() {
   return (
     <section>
       <p className="eyebrow">Méthode</p>
-      <h1>Lire la base avec prudence</h1>
+      <h1>Comment lire cette base ?</h1>
+      <p className="page-intro">
+        L’objectif est d’aider la famille à avancer dans le dossier sans aller
+        plus vite que les documents. Les outils automatiques sont utiles, mais
+        les archives originales restent le point d’appui.
+      </p>
       <div className="method-list">
         {sections.map((section) => (
           <article key={section.title} className="panel">

@@ -17,20 +17,25 @@ export default function ChronologyPage() {
 
   return (
     <section>
-      <p className="eyebrow">Repères</p>
-      <h1>Chronologie biographique</h1>
-      {loading && <p className="status">Chargement de la chronologie…</p>}
+      <p className="eyebrow">Repères familiaux</p>
+      <h1>Quelques repères chronologiques</h1>
+      <p className="page-intro">
+        Cette chronologie est construite à partir des documents déjà indexés.
+        Certaines dates sont encore incertaines et demandent une relecture des
+        images originales.
+      </p>
+      {loading && <p className="status">La chronologie se charge…</p>}
       {error && <p className="status error">{error}</p>}
       <div className="timeline">
         {dated.map((row) => (
           <article key={`${row.Ordre}-${row.Evenement}`}>
-            <time>{row.Date_ou_periode || "Sans date"}</time>
+            <time>{row.Date_ou_periode || "Date à préciser"}</time>
             <div>
-              <h2>{row.Evenement || "Événement non renseigné"}</h2>
+              <h2>{row.Evenement || "Événement pas encore indiqué"}</h2>
               <p>{row.Lieu}</p>
               <small>
-                Sources : {row.Source_image || "non renseignées"} · Confiance :{" "}
-                {row.Confiance || "non évaluée"}
+                Sources : {row.Source_image || "pas encore indiquées"} · Lecture :{" "}
+                {row.Confiance || "à relire"}
               </small>
               {row.Commentaire && <p className="note">{row.Commentaire}</p>}
             </div>
@@ -39,13 +44,13 @@ export default function ChronologyPage() {
       </div>
       {uncertain.length > 0 && (
         <>
-          <h2 className="subheading">Datation incertaine</h2>
+          <h2 className="subheading">Dates encore incertaines</h2>
           <div className="document-grid">
             {uncertain.map((row) => (
               <article key={`${row.Ordre}-${row.Evenement}`} className="panel">
-                <h3>{row.Date_ou_periode || "Date non précisée"}</h3>
+                <h3>{row.Date_ou_periode || "Date à préciser"}</h3>
                 <p>{row.Evenement}</p>
-                <small>Sources : {row.Source_image || "non renseignées"}</small>
+                <small>Sources : {row.Source_image || "pas encore indiquées"}</small>
               </article>
             ))}
           </div>

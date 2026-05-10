@@ -139,6 +139,14 @@ h4 {
   line-height: 1.65;
 }
 
+.page-intro {
+  max-width: 760px;
+  margin: 0.2rem 0 0;
+  color: #4d473f;
+  font-size: 1.03rem;
+  line-height: 1.6;
+}
+
 .method-warning,
 .panel,
 .archive-card,

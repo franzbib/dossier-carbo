@@ -12,12 +12,16 @@ export default function VerificationPage() {
     <section>
       <div className="section-heading">
         <div>
-          <p className="eyebrow">Contrôle critique</p>
-          <h1>Points à vérifier</h1>
+          <p className="eyebrow">Relectures utiles</p>
+          <h1>Ce qu’il faut encore éclaircir</h1>
+          <p className="page-intro">
+            Cette page rassemble les lectures incertaines, les dates douteuses ou
+            les passages qui méritent une relecture attentive.
+          </p>
         </div>
         <span className="count">{rows.length} point(s)</span>
       </div>
-      {loading && <p className="status">Chargement des points à vérifier…</p>}
+      {loading && <p className="status">Les points à relire se chargent…</p>}
       {error && <p className="status error">{error}</p>}
       <div className="document-grid">
         {rows.map((row) => (
@@ -26,20 +30,20 @@ export default function VerificationPage() {
             className={`panel ${isHighPriority(row.Priorite) ? "low-confidence" : ""}`}
           >
             <div className="card-title-row">
-              <h2>{row.Point_a_verifier || "Point non renseigné"}</h2>
-              <span className="confidence">{row.Priorite || "priorité non précisée"}</span>
+              <h2>{row.Point_a_verifier || "Point à préciser"}</h2>
+              <span className="confidence">{row.Priorite || "priorité à préciser"}</span>
             </div>
             <p>
-              <strong>Hypothèses :</strong> {row.Hypotheses || "Non renseignées"}
+              <strong>Pistes possibles :</strong> {row.Hypotheses || "Pas encore indiquées"}
             </p>
             <p>
-              <strong>Méthode :</strong>{" "}
-              {row.Methode_de_verification || "Méthode non renseignée"}
+              <strong>Comment vérifier :</strong>{" "}
+              {row.Methode_de_verification || "Méthode pas encore indiquée"}
             </p>
             <p>
-              <strong>Sources :</strong> {row.Sources_images || "Non renseignées"}
+              <strong>Documents à relire :</strong> {row.Sources_images || "Pas encore indiqués"}
             </p>
-            <small>Statut : {row.Statut || "non renseigné"}</small>
+            <small>Avancement : {row.Statut || "pas encore indiqué"}</small>
             {row.Commentaire && <p className="note">{row.Commentaire}</p>}
           </article>
         ))}

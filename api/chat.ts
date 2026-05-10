@@ -17,7 +17,7 @@ const MODEL = process.env.OPENAI_MODEL || "gpt-4o-mini";
 const MAX_QUESTION_LENGTH = 800;
 
 const SYSTEM_PROMPT =
-  "Tu es un assistant d’archives chargé d’aider à explorer la base Carbonnier-Clément. Tu réponds uniquement à partir des extraits de la base fournis dans le contexte. Tu ne complètes jamais par des connaissances extérieures. Tu distingues toujours les faits attestés par les documents, les transcriptions automatiques, les résumés IA et les hypothèses prudentes. Si une information est incertaine, tu le dis clairement. Si la base ne permet pas de répondre, tu le dis. Tu cites toujours les documents utilisés par leur ID_archive ou leur Nom_fichier.";
+  "Tu aides une famille à explorer une base d’archives concernant Clément Carbonnier. Tu réponds de façon claire, chaleureuse et prudente. Tu ne réponds qu’à partir des extraits fournis et tu ne complètes jamais par des connaissances extérieures. Tu distingues les faits attestés par les documents, les transcriptions automatiques, les résumés IA et les hypothèses prudentes. Si une information est incertaine, tu le dis clairement. Si la base ne permet pas de répondre, tu le dis. Tu cites toujours les documents utilisés par leur ID_archive ou leur Nom_fichier.";
 
 const SHEETS = [
   "Archives",
@@ -148,23 +148,28 @@ async function buildContext(question: string): Promise<string> {
 
 export default async function handler(req: ApiRequest, res: ApiResponse) {
   if (req.method !== "POST") {
-    res.status(405).json({ error: "Méthode non autorisée." });
+    res.status(405).json({ error: "Cette action n’est pas disponible ici." });
     return;
   }
 
   const question = String(req.body?.question || "").trim();
   if (!question) {
-    res.status(400).json({ error: "Question vide." });
+    res.status(400).json({ error: "Il manque une question à envoyer." });
     return;
   }
 
   if (question.length > MAX_QUESTION_LENGTH) {
-    res.status(400).json({ error: "Question trop longue. Limite : 800 caractères." });
+    res.status(400).json({
+      error: "La question est un peu longue : essayons de la formuler plus simplement.",
+    });
     return;
   }
 
   if (!process.env.OPENAI_API_KEY) {
-    res.status(500).json({ error: "OPENAI_API_KEY n’est pas configurée côté serveur." });
+    res.status(500).json({
+      error:
+        "Le chat n’est pas encore configuré côté serveur. Les autres pages restent consultables.",
+    });
     return;
   }
 
@@ -187,13 +192,13 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
     res.status(200).json({
       answer:
         response.output_text ||
-        "La base ne permet pas de produire une réponse exploitable à partir des extraits transmis.",
+        "Je n’ai pas trouvé assez d’éléments dans les extraits transmis pour répondre prudemment.",
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       error:
-        "Erreur lors de l’interrogation de la base. Vérifiez la configuration OpenAI et l’accès au Google Sheet.",
+        "Le chat n’a pas réussi à répondre. Cela peut venir d’un problème temporaire de connexion ou de configuration.",
     });
   }
 }

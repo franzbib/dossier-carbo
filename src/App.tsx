@@ -10,8 +10,8 @@ const navItems = [
   { to: "/", label: "Accueil" },
   { to: "/archives", label: "Archives" },
   { to: "/chronologie", label: "Chronologie" },
-  { to: "/points-a-verifier", label: "Points à vérifier" },
-  { to: "/interroger", label: "Interroger la base" },
+  { to: "/points-a-verifier", label: "À éclaircir" },
+  { to: "/interroger", label: "Poser une question" },
   { to: "/methode", label: "Méthode" },
 ];
 
@@ -19,7 +19,7 @@ export default function App() {
   return (
     <div className="app-shell">
       <div className="notice-bar">
-        Base expérimentale — transcriptions à vérifier sur les images originales.
+        Base familiale en cours de vérification — les documents originaux restent la référence.
       </div>
       <header className="site-header">
         <NavLink to="/" className="brand">

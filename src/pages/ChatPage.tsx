@@ -2,11 +2,12 @@ import { FormEvent, useState } from "react";
 import type { ChatMessage } from "../types";
 
 const suggestions = [
-  "Que sait-on de Clément Carbonnier ?",
-  "Quelles accusations apparaissent dans les documents ?",
-  "Quelle chronologie peut-on établir ?",
-  "Quels points doivent être vérifiés ?",
-  "Quels documents mentionnent PIGUET ou BERGEON ?",
+  "Que sait-on de Clément Carbonnier d’après les documents ?",
+  "Quels documents parlent du procès ?",
+  "Quels noms reviennent le plus souvent ?",
+  "Quelle chronologie peut-on établir pour le moment ?",
+  "Quels points restent à vérifier ?",
+  "Quels documents faudrait-il relire en priorité ?",
 ];
 
 export default function ChatPage() {
@@ -14,7 +15,7 @@ export default function ChatPage() {
     {
       role: "assistant",
       content:
-        "Posez une question sur la base. Je répondrai uniquement à partir des extraits disponibles et je citerai les documents utilisés.",
+        "Vous pouvez poser une question en langage simple. Je chercherai dans les documents indexés, en citant les sources utilisées et en signalant les incertitudes.",
     },
   ]);
   const [question, setQuestion] = useState("");
@@ -39,21 +40,33 @@ export default function ChatPage() {
       const data = (await response.json()) as { answer?: string; error?: string };
 
       if (!response.ok) {
-        throw new Error(data.error || "Erreur lors de l’interrogation de la base.");
+        throw new Error(
+          data.error ||
+            "Le chat n’a pas réussi à répondre. Cela peut venir d’un problème temporaire de connexion ou de configuration.",
+        );
       }
 
-      setMessages((current) => [
-        ...current,
-        { role: "assistant", content: data.answer || "Aucune réponse." },
-      ]);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Erreur inattendue.");
       setMessages((current) => [
         ...current,
         {
           role: "assistant",
           content:
-            "Je n’ai pas pu interroger la base pour le moment. Vérifiez la configuration de l’API ou réessayez plus tard.",
+            data.answer ||
+            "Je n’ai pas trouvé assez d’éléments dans les extraits transmis pour répondre prudemment.",
+        },
+      ]);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Le chat n’a pas réussi à répondre pour le moment.",
+      );
+      setMessages((current) => [
+        ...current,
+        {
+          role: "assistant",
+          content:
+            "Le chat n’a pas réussi à répondre. Cela peut venir d’un problème temporaire de connexion ou de configuration.",
         },
       ]);
     } finally {
@@ -68,8 +81,13 @@ export default function ChatPage() {
 
   return (
     <section className="chat-page">
-      <p className="eyebrow">Interroger la base</p>
-      <h1>Assistant d’exploration</h1>
+      <p className="eyebrow">Explorer ensemble</p>
+      <h1>Poser une question aux archives</h1>
+      <p className="page-intro">
+        Vous pouvez poser une question en langage simple. Le chat cherchera dans
+        la base et répondra uniquement à partir des documents indexés. S’il ne
+        trouve pas d’élément suffisant, il le dira.
+      </p>
       <div className="suggestions" aria-label="Questions suggérées">
         {suggestions.map((item) => (
           <button key={item} onClick={() => void submit(item)} disabled={loading}>
@@ -86,7 +104,7 @@ export default function ChatPage() {
           ))}
           {loading && (
             <div className="message assistant">
-              <p>Recherche dans les extraits pertinents…</p>
+              <p>Je cherche dans les documents indexés…</p>
             </div>
           )}
         </div>

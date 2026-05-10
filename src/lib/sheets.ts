@@ -15,7 +15,9 @@ export function sheetCsvUrl(sheetName: string): string {
 export async function loadSheet<T extends SheetRow>(sheetName: string): Promise<T[]> {
   const response = await fetch(sheetCsvUrl(sheetName));
   if (!response.ok) {
-    throw new Error(`Impossible de charger la feuille ${sheetName}.`);
+    throw new Error(
+      "La base n’a pas pu être chargée pour le moment. Il faudra réessayer dans quelques instants.",
+    );
   }
 
   const csv = await response.text();
@@ -26,7 +28,9 @@ export async function loadSheet<T extends SheetRow>(sheetName: string): Promise<
   });
 
   if (parsed.errors.length > 0) {
-    throw new Error(`Erreur de lecture CSV pour la feuille ${sheetName}.`);
+    throw new Error(
+      "La base a été reçue, mais sa lecture a échoué. Il faudra réessayer dans quelques instants.",
+    );
   }
 
   return parsed.data;
